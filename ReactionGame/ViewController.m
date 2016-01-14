@@ -17,6 +17,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    scoreInt = 0;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -26,11 +28,25 @@
 
 - (IBAction)startStop:(id)sender {
     
-    countInt = 3;
+    if (scoreInt == 0) {
     
-    self.getreadyLabel.text = [NSString stringWithFormat:@"%i", countInt];
+        countInt = 3;
     
-    timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(startCounter) userInfo:nil repeats:YES];
+        self.getreadyLabel.text = [NSString stringWithFormat:@"%i", countInt];
+        self.timerLabel.text = [NSString stringWithFormat:@"%i", scoreInt];
+    
+        timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(startCounter) userInfo:nil repeats:YES];
+        
+        [sender setTitle:@"Stop" forState:UIControlStateNormal];
+        
+    } else {
+        [timerScore invalidate];
+    }
+    
+    if (countInt == 0) {
+        scoreInt = 0;
+        [sender setTitle:@"Restart" forState:UIControlStateNormal];
+    }
 }
 
 -(void)startCounter {
@@ -41,6 +57,21 @@
     
     if (countInt == 0) {
         [timer invalidate];
+        
+        scoreInt = 0;
+        
+        self.timerLabel.text = [NSString stringWithFormat:@"%i", scoreInt];
+        
+        timerScore = [NSTimer scheduledTimerWithTimeInterval:0.001 target:self selector:@selector(scoreCounter) userInfo:nil repeats:YES];
     }
+}
+
+-(void)scoreCounter {
+    
+    scoreInt += 1;
+    
+    self.timerLabel.text = [NSString stringWithFormat:@"%i", scoreInt];
+    
+    
 }
 @end
